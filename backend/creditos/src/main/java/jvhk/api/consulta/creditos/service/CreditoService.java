@@ -1,6 +1,6 @@
 package jvhk.api.consulta.creditos.service;
 
-import jvhk.api.consulta.creditos.CreditoRepository;
+import jvhk.api.consulta.creditos.repository.CreditoRepository;
 import jvhk.api.consulta.creditos.dtos.CreditoDTO;
 import jvhk.api.consulta.creditos.entities.Credito;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,7 +8,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service

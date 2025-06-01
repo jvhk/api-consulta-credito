@@ -1,4 +1,4 @@
-package jvhk.api.consulta.creditos;
+package jvhk.api.consulta.creditos.repository;
 
 import jvhk.api.consulta.creditos.entities.Credito;
 import org.springframework.data.jpa.repository.JpaRepository;
