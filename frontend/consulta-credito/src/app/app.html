@@ -1,0 +1,157 @@
+<style >
+
+  button {
+    min-width: 100px;
+  }
+
+  ::ng-deep .mat-form-field-appearance-fill .mat-form-field-flex {
+    background-color: #f1f5f9 !important;
+    border-radius: 10px !important;
+    padding: 8px 12px !important;
+  }
+
+  ::ng-deep .mat-form-field-appearance-fill .mat-form-field-outline {
+    display: none;
+  }
+
+  ::ng-deep .mat-input-element {
+    font-size: 14px;
+  }
+
+</style>
+
+<main class="main">
+  <div class="content">
+    <div class="container">
+      <h2 class="mt-4">CONSULTA DE CRÉDITOS</h2>
+      <div class="row mt-3 px-2">
+
+          <mat-form-field appearance="outline" class="col-md-5 px-0">
+            <mat-label>Número crédito</mat-label>
+            <input matInput [(ngModel)]="numeroCredito" placeholder="Número crédito" />
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="col-md-5 pl-1 pr-0">
+            <mat-label>Número NFSE</mat-label>
+            <input matInput [(ngModel)]="numeroNfse" placeholder="Número NFSE" />
+          </mat-form-field>
+
+          <button mat-raised-button color="primary" type="button" (click)="buscarCredito()" class="mat-elevation-z3 col-md-2 mt-3">
+            Pesquisar
+          </button>
+      </div>
+
+      <table *ngIf="listaCreditos.length > 0" mat-table [dataSource]="listaCreditos" class="mat-elevation-z1 pl-0 ml-0">
+        <ng-container matColumnDef="aliquota">
+          <th mat-header-cell *matHeaderCellDef class="fw-bold"> Alíquota </th>
+          <td mat-cell *matCellDef="let element"> {{element.aliquota}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="baseCalculo">
+          <th mat-header-cell *matHeaderCellDef class="fw-bold"> Base cálculo </th>
+          <td mat-cell *matCellDef="let element"> {{element.baseCalculo.toFixed(2)}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="dataConstituicao">
+          <th mat-header-cell *matHeaderCellDef class="fw-bold"> Data constituição </th>
+          <td mat-cell *matCellDef="let element"> {{element.dataConstituicao}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="numeroCredito">
+          <th mat-header-cell *matHeaderCellDef class="fw-bold"> Número crédito </th>
+          <td mat-cell *matCellDef="let element"> {{element.numeroCredito}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="numeroNfse">
+          <th mat-header-cell *matHeaderCellDef class="fw-bold"> Número NFSE </th>
+          <td mat-cell *matCellDef="let element"> {{element.numeroNfse}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="simplesNacional">
+          <th mat-header-cell *matHeaderCellDef class="fw-bold"> Simples Nacional </th>
+          <td mat-cell *matCellDef="let element"> {{element.simplesNacional}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="tipoCredito">
+          <th mat-header-cell *matHeaderCellDef class="fw-bold"> Tipo Crédito </th>
+          <td mat-cell *matCellDef="let element"> {{element.tipoCredito}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="valorDeducao">
+          <th mat-header-cell *matHeaderCellDef class="fw-bold"> Valor dedução </th>
+          <td mat-cell *matCellDef="let element"> {{element.valorDeducao.toFixed(2)}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="valorFaturado">
+          <th mat-header-cell *matHeaderCellDef class="fw-bold"> Valor Faturado </th>
+          <td mat-cell *matCellDef="let element"> {{element.valorFaturado.toFixed(2)}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="valorIssqn">
+          <th mat-header-cell *matHeaderCellDef class="fw-bold"> Valor ISSQN </th>
+          <td mat-cell *matCellDef="let element"> {{element.valorIssqn.toFixed(2)}} </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+      </table>
+
+      <table *ngIf="detalhesCredito.length > 0" mat-table [dataSource]="detalhesCredito" class="mat-elevation-z1 pl-0 ml-0">
+        <ng-container matColumnDef="aliquota">
+          <th mat-header-cell *matHeaderCellDef class="fw-bold"> Alíquota </th>
+          <td mat-cell *matCellDef="let element"> {{element.aliquota}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="baseCalculo">
+          <th mat-header-cell *matHeaderCellDef class="fw-bold"> Base cálculo </th>
+          <td mat-cell *matCellDef="let element"> {{element.baseCalculo.toFixed(2)}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="dataConstituicao">
+          <th mat-header-cell *matHeaderCellDef class="fw-bold"> Data constituição </th>
+          <td mat-cell *matCellDef="let element"> {{element.dataConstituicao}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="numeroCredito">
+          <th mat-header-cell *matHeaderCellDef class="fw-bold"> Número crédito </th>
+          <td mat-cell *matCellDef="let element"> {{element.numeroCredito}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="numeroNfse">
+          <th mat-header-cell *matHeaderCellDef class="fw-bold"> Número NFSE </th>
+          <td mat-cell *matCellDef="let element"> {{element.numeroNfse}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="simplesNacional">
+          <th mat-header-cell *matHeaderCellDef class="fw-bold"> Simples Nacional </th>
+          <td mat-cell *matCellDef="let element"> {{element.simplesNacional}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="tipoCredito">
+          <th mat-header-cell *matHeaderCellDef class="fw-bold"> Tipo Crédito </th>
+          <td mat-cell *matCellDef="let element"> {{element.tipoCredito}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="valorDeducao">
+          <th mat-header-cell *matHeaderCellDef class="fw-bold"> Valor dedução </th>
+          <td mat-cell *matCellDef="let element"> {{element.valorDeducao.toFixed(2)}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="valorFaturado">
+          <th mat-header-cell *matHeaderCellDef class="fw-bold"> Valor Faturado </th>
+          <td mat-cell *matCellDef="let element"> {{element.valorFaturado.toFixed(2)}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="valorIssqn">
+          <th mat-header-cell *matHeaderCellDef class="fw-bold"> Valor ISSQN </th>
+          <td mat-cell *matCellDef="let element"> {{element.valorIssqn.toFixed(2)}} </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+      </table>
+    </div>
+  </div>
+</main>
+
+<router-outlet />
