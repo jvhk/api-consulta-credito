@@ -129,7 +129,7 @@ docker-compose down
 ## 👤 Autor
 
 Seu Nome  
-[Seu LinkedIn](https://www.linkedin.com/in/jvhk/)  
-[Seu GitHub](https://github.com/jvhk)
+[LinkedIn](https://www.linkedin.com/in/jvhk/)  
+[GitHub](https://github.com/jvhk)
 
 ---
