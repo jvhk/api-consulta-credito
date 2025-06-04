@@ -129,7 +129,9 @@ docker-compose down
 ## 👤 Autor
 
 João Vitor 
+
 [LinkedIn](https://www.linkedin.com/in/jvhk/)  
+
 [GitHub](https://github.com/jvhk)
 
 ---
