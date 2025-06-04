@@ -1,59 +1,68 @@
-# ConsultaCredito
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 20.0.0.
+# consulta-credito - Frontend Angular
 
-## Development server
+Este projeto é o frontend da aplicação **consulta-credito**, desenvolvido em Angular 19.
 
-To start a local development server, run:
+---
 
-```bash
-ng serve
-```
+## Pré-requisitos
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+- Node.js v20.19.2 (para desenvolvimento local)
+- Docker instalado (para build e execução via container)
 
-## Code scaffolding
+---
 
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
+## Build da aplicação
 
-```bash
-ng generate component component-name
-```
-
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
+Para gerar a build de produção da aplicação Angular:
 
 ```bash
-ng generate --help
+npm install
+npm run build -- --configuration production
 ```
 
-## Building
+A build será gerada na pasta `dist/consulta-credito/browser`.
 
-To build the project run:
+---
+
+## Dockerização
+
+Este projeto possui um **Dockerfile** configurado para:
+
+1. Construir a aplicação Angular com Node.js.
+2. Servir os arquivos estáticos com Nginx.
+
+---
+
+## Como rodar com Docker
+
+### Passos:
+
+1. Construir a imagem Docker:
 
 ```bash
-ng build
+docker build -t consulta-credito .
 ```
 
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
-
-## Running unit tests
-
-To execute unit tests with the [Karma](https://karma-runner.github.io) test runner, use the following command:
+2. Rodar o container, mapeando a porta 4200 para a porta 80 do container (Nginx):
 
 ```bash
-ng test
+docker run -p 4200:80 consulta-credito
 ```
 
-## Running end-to-end tests
+3. Acesse a aplicação no navegador em: [http://localhost:4200](http://localhost:4200)
 
-For end-to-end (e2e) testing, run:
+---
 
-```bash
-ng e2e
-```
+## Observações
 
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
+- O Nginx está configurado para servir a aplicação na porta 80 dentro do container.
+- A porta 4200 está exposta para acesso local, pode ser alterada conforme necessidade.
 
-## Additional Resources
+---
 
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+## Contato
+
+Para dúvidas ou sugestões, abra uma issue ou entre em contato.
+
+---

@@ -6,6 +6,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatTableModule } from '@angular/material/table';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 import Swal from 'sweetalert2';
 
@@ -13,7 +14,7 @@ import { CreditoService, Credito } from './services/credito';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, CommonModule, FormsModule, MatFormFieldModule, MatInputModule, MatButtonModule, MatTableModule ],
+  imports: [RouterOutlet, CommonModule, FormsModule, MatFormFieldModule, MatInputModule, MatButtonModule, MatTableModule, MatProgressSpinnerModule ],
   templateUrl: './app.html',
   styleUrl: './app.css'
 })
@@ -21,6 +22,7 @@ export class App {
   protected title = 'consulta-credito';
   numeroCredito = '';
   numeroNfse = '';
+  isLoading = false;
   listaCreditos: Credito[] = [];
   detalhesCredito: Credito[] = [];
   displayedColumns: string[] = [
@@ -39,26 +41,49 @@ export class App {
   constructor(private creditoService: CreditoService) {}
 
   buscarCredito() {
-    const temNumeroNfse = this.numeroNfse && this.numeroNfse.trim() !== '';
-    const temNumeroCredito = this.numeroCredito && this.numeroCredito.trim() !== '';
+    this.isLoading = true;
+    const temNumeroNfse = this.numeroNfse && this.numeroNfse !== '';
+    const temNumeroCredito = this.numeroCredito && this.numeroCredito !== '';
 
     if (temNumeroNfse && !temNumeroCredito) {
       this.creditoService.listaCreditosByNumeroNfse(this.numeroNfse).subscribe({
         next: (res) => {
-          console.log("res:? ", res);
           this.listaCreditos = res;
           this.detalhesCredito = [];
+          this.isLoading = false;
+          if(this.listaCreditos.length === 0){
+            Swal.fire({
+              icon: 'warning',
+              title: 'Nenhum resultado encontrado.',
+              confirmButtonColor: '#3f51b5'
+            });
+            return;
+          }
         },
-        error: (err) => console.error('Erro ao buscar créditos:', err)
+        error: (err) => {
+          console.error('Erro ao buscar créditos:', err);
+          this.isLoading = false;
+        }
       });
     } else if (!temNumeroNfse && temNumeroCredito) {
       this.creditoService.buscarCredito(this.numeroCredito).subscribe({
         next: (res) => {
-          console.log("res:? ", res);
           this.detalhesCredito = res ? [res] : [];
           this.listaCreditos = [];
+          this.isLoading = false;
+          if(this.detalhesCredito.length === 0){
+            Swal.fire({
+              icon: 'warning',
+              title: 'Nenhum resultado encontrado.',
+              confirmButtonColor: '#3f51b5'
+            });
+            return;
+          }
         },
-        error: (err) => console.error('Erro ao buscar crédito:', err)
+        error: (err) => {
+          console.error('Erro ao buscar crédito:', err);
+          this.isLoading = false;
+        }
       });
     } else if (!this.numeroCredito && !this.numeroNfse) {
         Swal.fire({
@@ -67,10 +92,22 @@ export class App {
           text: 'Informe pelo menos um dos campos para realizar a busca.',
           confirmButtonColor: '#3f51b5'
         });
+        this.isLoading = false;
         return;
-    } else {
+    } else if (this.numeroCredito != null && this.numeroNfse != null) {
+        Swal.fire({
+          icon: 'warning',
+          title: 'Preenchimento incorreto!',
+          text: 'Preencha apenas um dos campos por pesquisa.',
+          confirmButtonColor: '#3f51b5'
+        });
+        this.isLoading = false;
+        return;
+    }
+    else {
       this.listaCreditos = [];
       this.detalhesCredito = [];
+      this.isLoading = false;
     }
   }
 }
