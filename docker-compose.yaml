@@ -1,0 +1,39 @@
+services:
+  # Banco de dados PostgreSQL
+  postgres:
+    image: postgres:15
+    container_name: postgres_credito
+    environment:
+      POSTGRES_DB: credito_db
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: root
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./backend/creditos/db/init:/docker-entrypoint-initdb.d
+
+  # Backend - Spring Boot
+  backend:
+    build:
+      context: ./backend/creditos
+      dockerfile: Dockerfile
+    container_name: backend_api_credito
+    ports:
+      - "8080:8080"
+    depends_on:
+      - postgres
+
+  # Frontend - Angular 19 com Nginx
+  frontend:
+    build:
+      context: ./frontend/consulta-credito
+      dockerfile: Dockerfile
+    container_name: frontend_credito
+    ports:
+      - "4200:80"
+    depends_on:
+      - backend
+
+volumes:
+  postgres_data:

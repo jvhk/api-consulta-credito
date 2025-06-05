@@ -1,4 +1,3 @@
-# Stage 1: Build da aplicação Angular
 FROM node:20.19.2 AS build
 
 WORKDIR /app
@@ -10,7 +9,6 @@ COPY . .
 
 RUN npm run build -- --configuration production
 
-# Stage 2: Servir com nginx
 FROM nginx:alpine
 
 RUN rm -rf /usr/share/nginx/html/*

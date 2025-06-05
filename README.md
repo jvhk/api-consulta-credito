@@ -1,7 +1,11 @@
+# 📊 Consulta Crédito - Fullstack (API + Frontend)
 
-# 📊 API Consulta Crédito
+Este projeto é composto por duas partes:
 
-Este projeto é uma API Java (Spring Boot) que se conecta a um banco de dados PostgreSQL. Toda a configuração necessária está contida em containers Docker, facilitando o uso sem necessidade de instalações manuais.
+- 🧠 **Backend (API)**: Aplicação Java 17 com Spring Boot que se conecta a um banco de dados PostgreSQL.
+- 🌐 **Frontend**: Aplicação Angular 19 empacotada com Nginx para exibição da interface.
+
+Toda a configuração está contida em containers Docker, facilitando a execução do sistema completo sem instalação manual de dependências.
 
 ---
 
@@ -17,11 +21,11 @@ Este projeto é uma API Java (Spring Boot) que se conecta a um banco de dados Po
 ### 1. Clone este repositório
 
 ```bash
-git https://github.com/jvhk/api-consulta-credito.git
-cd api-consulta-credito/backend/creditos
+git clone https://github.com/jvhk/api-consulta-credito.git
+cd api-consulta-credito
 ```
 
-### 2. Suba os containers com Docker Compose
+### 2. Suba todos os containers (frontend, backend e banco)
 
 ```bash
 docker-compose up --build
@@ -32,8 +36,11 @@ docker-compose up --build
 ## 🧱 O que acontece ao iniciar?
 
 - O banco PostgreSQL é iniciado no container `postgres_credito`.
-- O banco `credito_db` é criado automaticamente.
-- A tabela `credito` é criada com o seguinte comando:
+- O banco `credito_db` é criado automaticamente com tabela `credito` e dados iniciais via scripts SQL.
+- A API Spring Boot é empacotada com Gradle e iniciada no container `backend_api_credito`.
+- A aplicação Angular é construída e servida via Nginx no container `frontend_credito`.
+
+### 🔄 Tabela `credito` criada automaticamente:
 
 ```sql
 CREATE TABLE credito
@@ -52,46 +59,43 @@ CREATE TABLE credito
 );
 ```
 
-- Dados de exemplo são inseridos automaticamente:
+### 📦 Dados de exemplo inseridos:
 
 ```sql
-INSERT INTO credito (numero_credito, numero_nfse, data_constituicao, valor_issqn, tipo_credito, simples_nacional, aliquota, valor_faturado, valor_deducao, base_calculo)
-VALUES
+INSERT INTO credito (...) VALUES
 ('123456', '7891011', '2024-02-25', 1500.75, 'ISSQN', true, 5.0, 30000.00, 5000.00, 25000.00),
 ('789012', '7891011', '2024-02-26', 1200.50, 'ISSQN', false, 4.5, 25000.00, 4000.00, 21000.00),
 ('654321', '1122334', '2024-01-15', 800.50, 'Outros', true, 3.5, 20000.00, 3000.00, 17000.00);
 ```
 
-- A aplicação Spring Boot é empacotada e iniciada em `http://localhost:8080/api`.
+---
+
+## 🌐 Acessos
+
+- 🔸 **Frontend (interface)**: [http://localhost:4200](http://localhost:4200)
+- 🔸 **Backend (API REST)**: [http://localhost:8080/api](http://localhost:8080/api)
 
 ---
 
 ## 🔍 Endpoints da API
 
-A API ficará acessível via:
+A API estará acessível na rota base `/api`. Endpoints disponíveis:
 
-```
-http://localhost:8080/api
-```
+| Método | URL                                       | Descrição                                                 |
+|--------|-------------------------------------------|-----------------------------------------------------------|
+| GET    | `/creditos/{numeroNfse}`                 | Lista créditos filtrados pelo número da NFSe              |
+| GET    | `/creditos/credito/{numeroCredito}`      | Retorna um crédito específico pelo número do crédito      |
 
-### Endpoints disponíveis na rota `/creditos`:
+Exemplos:
 
-| Método | URL                          | Descrição                                     |
-|--------|------------------------------|-----------------------------------------------|
-| GET    | `/creditos/{numeroNfse}`     | Retorna lista de créditos filtrados pelo número NFSe |
-| GET    | `/creditos/credito/{numeroCredito}` | Retorna crédito específico pelo número do crédito  |
-
-Exemplo de uso:
-
-- `GET http://localhost:8080/api/creditos/7891011` — lista créditos pelo número NFSe `7891011`
-- `GET http://localhost:8080/api/creditos/credito/123456` — consulta crédito pelo número do crédito `123456`
-
+- `GET http://localhost:8080/api/creditos/7891011`
+- `GET http://localhost:8080/api/creditos/credito/123456`
 
 ---
 
 ## 🧪 Acesso ao banco de dados
 
-Você pode acessar o banco utilizando alguma ferramenta como **DBeaver**, **pgAdmin** ou terminal via `psql`:
+Você pode acessar o PostgreSQL com ferramentas como DBeaver, pgAdmin ou via terminal `psql`:
 
 - **Host**: `localhost`
 - **Porta**: `5432`
@@ -101,7 +105,7 @@ Você pode acessar o banco utilizando alguma ferramenta como **DBeaver**, **pgAd
 
 ---
 
-## 🧹 Para parar os containers
+## 🧹 Parar os containers
 
 ```bash
 docker-compose down
@@ -109,29 +113,33 @@ docker-compose down
 
 ---
 
-## 🗂️ Estrutura do projeto relevante
+## 🗂️ Estrutura de pastas relevante
 
 ```
 .
-├── Dockerfile
-├── docker-compose.yml
-├── db
-│   └── init
-│       ├── create-db.sql         # Criação da tabela
-│       └── insert-values.sql     # Inserts iniciais
-├── src/                          # Código da aplicação
-├── build.gradle
-└── README.md
+├── docker-compose.yaml              # Compose unificado
+│
+├── backend/
+│   └── creditos/
+│       ├── Dockerfile               # Docker do backend
+│       ├── db/
+│       │   └── init/
+│       │       ├── create-db.sql
+│       │       └── insert-values.sql
+│       └── src/                     # Código Java/Spring Boot
+│
+└── frontend/
+    └── consulta-credito/
+        ├── Dockerfile              # Docker do frontend (Angular + Nginx)
+        └── src/                    # Código Angular
 ```
 
 ---
 
 ## 👤 Autor
 
-João Vitor 
-
+João Vitor  
 [LinkedIn](https://www.linkedin.com/in/jvhk/)  
-
 [GitHub](https://github.com/jvhk)
 
 ---
